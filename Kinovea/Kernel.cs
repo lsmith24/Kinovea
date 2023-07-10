@@ -73,6 +73,12 @@ namespace Kinovea.Root
         private ToolStripMenuItem mnuVideo = new ToolStripMenuItem();
         private ToolStripMenuItem mnuTools = new ToolStripMenuItem();
         private ToolStripMenuItem mnuOptions = new ToolStripMenuItem();
+
+        // adding save to cloud menu item
+        private ToolStripMenuItem mnuSaveToCloud = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuAddInstructor = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuSendToCloud = new ToolStripMenuItem();
+
         private ToolStripMenuItem mnuLanguages = new ToolStripMenuItem();
         private Dictionary<string, ToolStripMenuItem> languageMenus = new Dictionary<string, ToolStripMenuItem>();
         private ToolStripMenuItem mnuPreferences = new ToolStripMenuItem();
@@ -312,6 +318,10 @@ namespace Kinovea.Root
             mnuView.DropDownItems.AddRange(new ToolStripItem[] { mnuToggleFileExplorer, mnuFullScreen, new ToolStripSeparator() });
             #endregion
 
+            // Save To Cloud
+            mnuSaveToCloud.DropDownItems.AddRange(new ToolStripItem[] { mnuSendToCloud, mnuAddInstructor });
+
+
             #region Options
             mnuLanguages.Image = Properties.Resources.international;
             foreach(KeyValuePair<string, string> lang in LanguageManager.Languages)
@@ -374,7 +384,7 @@ namespace Kinovea.Root
 
             // Top level merge.
             MenuStrip thisMenuStrip = new MenuStrip();
-            thisMenuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuEdit, mnuView, mnuImage, mnuVideo, mnuTools, mnuOptions, mnuHelp });
+            thisMenuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuEdit, mnuView, mnuImage, mnuVideo, mnuTools, mnuOptions, mnuHelp, mnuSaveToCloud, });
             thisMenuStrip.AllowMerge = true;
 
             ToolStripManager.Merge(thisMenuStrip, menu);
@@ -430,6 +440,10 @@ namespace Kinovea.Root
             mnuLanguages.Text = RootLang.mnuLanguages;
             mnuPreferences.Text = RootLang.mnuPreferences;
             mnuTimecode.Text = RootLang.mnuTimeFormat;
+
+            mnuSaveToCloud.Text = RootLang.mnuSaveToCloud;
+            mnuSendToCloud.Text = RootLang.mnuSendToCloud;
+            mnuAddInstructor.Text = RootLang.mnuAddInstructor;
 
             mnuTimecodeClassic.Text = "[h:][mm:]ss.xx[x]";
             mnuTimecodeClassic.Image = Properties.Resources.timecode;
