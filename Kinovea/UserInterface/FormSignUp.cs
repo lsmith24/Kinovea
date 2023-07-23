@@ -18,10 +18,17 @@ namespace Kinovea.Root
     {
 
         IMongoCollection<User> collection;
+        RootKernel kernel;
 
         public FormSignUp()
         {
             InitializeComponent();
+        }
+
+        public FormSignUp(RootKernel kern)
+        {
+            InitializeComponent();
+            kernel = kern;
         }
 
         private void FormSignUp_Load(object sender, EventArgs e)
@@ -30,7 +37,7 @@ namespace Kinovea.Root
 
             var connectionString = ConfigurationManager.ConnectionStrings["MongoDBConnection"].ConnectionString;
             IMongoClient client = new MongoClient(connectionString);
-            IMongoDatabase db = client.GetDatabase("AlopexTest");
+            IMongoDatabase db = client.GetDatabase("Alopex");
             collection = db.GetCollection<User>("alopexUsers");
         }
 
@@ -49,7 +56,8 @@ namespace Kinovea.Root
                                     );
 
             collection.InsertOne(user);
-            
+            kernel.currentUser = user;
+            kernel.RefreshForUser();
             this.Close();
         }
 

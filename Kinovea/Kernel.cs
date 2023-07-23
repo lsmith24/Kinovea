@@ -460,10 +460,10 @@ namespace Kinovea.Root
                 log.Debug("User Logged In");
                 mnuCurrentUser.Text = "User: " + currentUser.Name;
             }
-            else
-            {
-                mnuCurrentUser.Text = "User: ";
-            }
+            //else
+            //{
+            //    mnuCurrentUser.Text = "User: ";
+            //}
 
             mnuTimecodeClassic.Text = "[h:][mm:]ss.xx[x]";
             mnuTimecodeClassic.Image = Properties.Resources.timecode;

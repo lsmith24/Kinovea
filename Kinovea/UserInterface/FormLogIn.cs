@@ -19,7 +19,7 @@ namespace Kinovea.Root
     public partial class fm_login : Form
     {
         IMongoCollection<User> collection;
-        public User loggedInUser = null;
+        //public User loggedInUser = null;
 
         RootKernel kernel;
 
@@ -38,14 +38,14 @@ namespace Kinovea.Root
         {
             var connectionString = ConfigurationManager.ConnectionStrings["MongoDBConnection"].ConnectionString;
             IMongoClient client = new MongoClient(connectionString);
-            IMongoDatabase db = client.GetDatabase("AlopexTest");
+            IMongoDatabase db = client.GetDatabase("Alopex");
             collection = db.GetCollection<User>("alopexUsers");
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
             this.Close();
-            FormSignUp signUpForm = new FormSignUp();
+            FormSignUp signUpForm = new FormSignUp(kernel);
             signUpForm.ShowDialog();
             signUpForm.Dispose();
             
