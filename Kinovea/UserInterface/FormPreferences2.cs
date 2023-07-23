@@ -211,5 +211,10 @@ namespace Kinovea.Root
             }
         }
         #endregion
+
+        private void pnlButtons_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }

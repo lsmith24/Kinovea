@@ -1105,6 +1105,15 @@ namespace Kinovea.Root.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Alopex Golf.
+        /// </summary>
+        internal static string mnuAlopexMenu {
+            get {
+                return ResourceManager.GetString("mnuAlopexMenu", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Open log folder….
         /// </summary>
         internal static string mnuApplicationFolder {
@@ -1195,6 +1204,15 @@ namespace Kinovea.Root.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Log In.
+        /// </summary>
+        internal static string mnuLogIn {
+            get {
+                return ResourceManager.GetString("mnuLogIn", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string mnuOptions {
@@ -1218,15 +1236,6 @@ namespace Kinovea.Root.Languages {
         internal static string mnuRedo {
             get {
                 return ResourceManager.GetString("mnuRedo", resourceCulture);
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized string similar to Save To Cloud.
-        /// </summary>
-        internal static string mnuSaveToCloud {
-            get {
-                return ResourceManager.GetString("mnuSaveToCloud", resourceCulture);
             }
         }
         

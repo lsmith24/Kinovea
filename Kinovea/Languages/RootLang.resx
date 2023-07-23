@@ -543,10 +543,13 @@
   <data name="mnuAddInstructor" xml:space="preserve">
     <value>Add Instructor</value>
   </data>
-  <data name="mnuSaveToCloud" xml:space="preserve">
-    <value>Save To Cloud</value>
+  <data name="mnuAlopexMenu" xml:space="preserve">
+    <value>Alopex Golf</value>
   </data>
   <data name="mnuSendToCloud" xml:space="preserve">
     <value>Send To Cloud</value>
+  </data>
+  <data name="mnuLogIn" xml:space="preserve">
+    <value>Log In</value>
   </data>
 </root>

@@ -48,7 +48,9 @@ namespace Kinovea.Root
             get { return screenManager; }
         }
         #endregion
-        
+
+        public User currentUser;
+
         #region Members
         private KinoveaMainWindow mainWindow;
         private FileBrowserKernel fileBrowser;
@@ -75,9 +77,13 @@ namespace Kinovea.Root
         private ToolStripMenuItem mnuOptions = new ToolStripMenuItem();
 
         // adding save to cloud menu item
-        private ToolStripMenuItem mnuSaveToCloud = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuAlopexMenu = new ToolStripMenuItem();
         private ToolStripMenuItem mnuAddInstructor = new ToolStripMenuItem();
         private ToolStripMenuItem mnuSendToCloud = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuLogIn = new ToolStripMenuItem();
+
+        // displaying current user in menu bar
+        private ToolStripLabel mnuCurrentUser = new ToolStripLabel();
 
         private ToolStripMenuItem mnuLanguages = new ToolStripMenuItem();
         private Dictionary<string, ToolStripMenuItem> languageMenus = new Dictionary<string, ToolStripMenuItem>();
@@ -319,8 +325,10 @@ namespace Kinovea.Root
             #endregion
 
             // Save To Cloud
-            mnuSaveToCloud.DropDownItems.AddRange(new ToolStripItem[] { mnuSendToCloud, mnuAddInstructor });
-
+            mnuAlopexMenu.DropDownItems.AddRange(new ToolStripItem[] { mnuLogIn, mnuSendToCloud, mnuAddInstructor });
+            mnuSendToCloud.Click += new EventHandler(mnuSendToCloudOnClick);
+            mnuAddInstructor.Click += new EventHandler(mnuAddInstructorOnClick);
+            mnuLogIn.Click += new EventHandler(mnuLogInOnClick);
 
             #region Options
             mnuLanguages.Image = Properties.Resources.international;
@@ -384,7 +392,7 @@ namespace Kinovea.Root
 
             // Top level merge.
             MenuStrip thisMenuStrip = new MenuStrip();
-            thisMenuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuEdit, mnuView, mnuImage, mnuVideo, mnuTools, mnuOptions, mnuHelp, mnuSaveToCloud, });
+            thisMenuStrip.Items.AddRange(new ToolStripItem[] { mnuFile, mnuEdit, mnuView, mnuImage, mnuVideo, mnuTools, mnuOptions, mnuHelp, mnuAlopexMenu, mnuCurrentUser });
             thisMenuStrip.AllowMerge = true;
 
             ToolStripManager.Merge(thisMenuStrip, menu);
@@ -441,9 +449,21 @@ namespace Kinovea.Root
             mnuPreferences.Text = RootLang.mnuPreferences;
             mnuTimecode.Text = RootLang.mnuTimeFormat;
 
-            mnuSaveToCloud.Text = RootLang.mnuSaveToCloud;
+            mnuAlopexMenu.Text = RootLang.mnuAlopexMenu;
             mnuSendToCloud.Text = RootLang.mnuSendToCloud;
             mnuAddInstructor.Text = RootLang.mnuAddInstructor;
+            mnuLogIn.Text = RootLang.mnuLogIn;
+
+            // if there is current user, display the user name
+            if (currentUser != null)
+            {
+                log.Debug("User Logged In");
+                mnuCurrentUser.Text = "User: " + currentUser.Name;
+            }
+            else
+            {
+                mnuCurrentUser.Text = "User: ";
+            }
 
             mnuTimecodeClassic.Text = "[h:][mm:]ss.xx[x]";
             mnuTimecodeClassic.Image = Properties.Resources.timecode;
@@ -468,6 +488,16 @@ namespace Kinovea.Root
             mnuWebsite.Text = "www.kinovea.org";
             mnuAbout.Text = RootLang.mnuAbout;
             mnuHelp.Text = RootLang.mnuHelp;
+        }
+
+        public void RefreshForUser()
+        {
+            // if there is current user, display the user name
+            if (currentUser != null)
+            {
+                log.Debug("User Logged In");
+                mnuCurrentUser.Text = "User: " + currentUser.Name;
+            }
         }
         #endregion
 
@@ -570,6 +600,26 @@ namespace Kinovea.Root
             log.Debug("Setting current ui culture.");
             Thread.CurrentThread.CurrentUICulture = PreferencesManager.GeneralPreferences.GetSupportedCulture();
             PreferencesUpdated();
+        }
+
+        // save to cloud on click functions
+        private void mnuSendToCloudOnClick(object sender, EventArgs e)
+        {
+            FormSaveToCloud s2c = new FormSaveToCloud();
+            s2c.ShowDialog();
+            s2c.Dispose(); 
+        }
+
+        private void mnuAddInstructorOnClick(object sender, EventArgs e)
+        {
+
+        }
+
+        private void mnuLogInOnClick(object sender, EventArgs e)
+        {
+            fm_login loginForm = new fm_login(this);
+            loginForm.ShowDialog();
+            loginForm.Dispose();
         }
 
         private void CheckTimecodeMenu()
