@@ -53,39 +53,44 @@ namespace Kinovea.Root
 
         private void btn_logIn_Click(object sender, EventArgs e)
         {
-            Console.WriteLine("HI");
             searchForUser();
         }
 
         private bool searchForUser()
         {
+            // this doesn't work if two people have same email but .. they shouldn't
+
             var filterDefinition = Builders<User>.Filter.Eq(r => r.Email, txt_email.Text);
-            var person = collection.Find(filterDefinition).FirstOrDefault();
+            User person = collection.Find(filterDefinition).FirstOrDefault();
 
             if (person == null)
             {
-                lbl_usererror.Text = "User Not Found.";
-                return false;
-            }
-
-            if (!person.Email.Equals(txt_email.Text))
-            {
-                lbl_usererror.Text = "User Not Found.";
-                //Console.WriteLine("Login Failed");
+                // no match found
+                lbl_usererror.Text = "Incorrect Login";
                 return false;
             }
 
             if (person.Name.Equals(txt_name.Text))
             {
-                //Console.WriteLine("Login Succeeded");
-                kernel.currentUser = person;
+                // Successful Log In
+                kernel.currentUsers.Add(person);
                 kernel.RefreshForUser();
+
+                // new session
+                //Session newSesh = new Session();
+                //var update = Builders<User>.Update.Push<Session>(u => u.Sessions, newSesh);
+                //collection.UpdateOne(filterDefinition, update);
+
+                // add new session to map
+                Session newSesh = new Session();
+                kernel.sessionMap.Add(person, newSesh);
+
                 this.Close();
                 return true;
             }
             else
             {
-                lbl_usererror.Text = "User Not Found.";
+                lbl_usererror.Text = "Incorrect Login";
                 //Console.WriteLine("Login Failed");
                 return false;
             }

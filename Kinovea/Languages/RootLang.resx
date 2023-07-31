@@ -552,4 +552,16 @@
   <data name="mnuLogIn" xml:space="preserve">
     <value>Log In</value>
   </data>
+  <data name="mnuExportVideos" xml:space="preserve">
+    <value>Export Videos</value>
+  </data>
+  <data name="mnuEndSession" xml:space="preserve">
+    <value>End Session</value>
+  </data>
+  <data name="mnuNewSession" xml:space="preserve">
+    <value>Start Session</value>
+  </data>
+  <data name="mnuSignUp" xml:space="preserve">
+    <value>Sign Up</value>
+  </data>
 </root>

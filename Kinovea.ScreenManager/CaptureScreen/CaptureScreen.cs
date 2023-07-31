@@ -38,9 +38,20 @@ using Kinovea.Video;
 using Kinovea.Pipeline;
 using Kinovea.Video.FFMpeg;
 using Kinovea.Services;
+using Amazon.Runtime;
+using Amazon.S3;
+using Amazon.S3.Transfer;
 
 namespace Kinovea.ScreenManager
 {
+
+    public class S3Object
+    {
+        public string Name { get; set; } = null;
+        public string FilePath { get; set; } = null;
+        public string BucketName { get; set; } = null;
+    }
+
     /// <summary>
     /// Main presenter class for the capture ui.
     /// Responsible for managing and synching a grabber, a circular buffer, a recorder and a viewport.
@@ -152,6 +163,10 @@ namespace Kinovea.ScreenManager
         private bool cameraLoaded;
         private bool cameraConnected;
         private bool recording;
+
+        // S3 **TODO: Make these inaccessible**
+        private string awsKey = "";
+        private string awsSecretKey = "";
 
         private bool prepareFailed;
         private ImageDescriptor prepareFailedImageDescriptor;
@@ -288,11 +303,28 @@ namespace Kinovea.ScreenManager
         /// <summary>
         /// Start capture if armed.
         /// </summary>
-        public void TriggerCapture()
+        //public void TriggerCapture()
+        //{
+        //    if (!cameraConnected || !triggerArmed || recording)
+        //        return;
+
+        //    switch (PreferencesManager.CapturePreferences.CaptureAutomationConfiguration.TriggerAction)
+        //    {
+        //        case AudioTriggerAction.SaveSnapshot:
+        //            MakeSnapshot();
+        //            break;
+        //        case AudioTriggerAction.RecordVideo:
+        //        default:
+        //            ToggleRecording();
+        //            break;
+        //    }
+        //}
+
+        public bool TriggerCapture()
         {
             if (!cameraConnected || !triggerArmed || recording)
-                return;
-            
+                return false;
+
             switch (PreferencesManager.CapturePreferences.CaptureAutomationConfiguration.TriggerAction)
             {
                 case AudioTriggerAction.SaveSnapshot:
@@ -303,6 +335,8 @@ namespace Kinovea.ScreenManager
                     ToggleRecording();
                     break;
             }
+
+            return true;
         }
 
         /// <summary>
@@ -1643,6 +1677,8 @@ namespace Kinovea.ScreenManager
             if (!OverwriteCheck(path))
                 return;
 
+            //Console.WriteLine(path);
+
             // Stop any current recording.
             switch (recordingMode)
             {
@@ -1733,6 +1769,8 @@ namespace Kinovea.ScreenManager
 
             string finalFilename = pipelineManager.Path;
 
+            //Console.WriteLine(finalFilename);
+
             if (recordingMode != CaptureRecordingMode.Scheduled)
             {
                 if (recordingMode == CaptureRecordingMode.Camera)
@@ -1788,6 +1826,35 @@ namespace Kinovea.ScreenManager
 
             PreferencesManager.FileExplorerPreferences.AddRecentCapturedFile(finalFilename);
             NotificationCenter.RaiseRefreshFileExplorer(this, false);
+
+            // Upload video to s3 bucket
+
+            S3Object s3obj = new S3Object()
+            {
+                BucketName = "alopexswingvideos",
+                Name = finalFilename,
+                FilePath = finalFilename
+            };
+
+            BasicAWSCredentials credentials = new BasicAWSCredentials(awsKey, awsSecretKey);
+            AmazonS3Client s3Client = new AmazonS3Client(credentials, Amazon.RegionEndpoint.USEast2);
+
+            try
+            {
+                TransferUtility fileTransferUtility = new TransferUtility(s3Client);
+                fileTransferUtility.Upload(finalFilename, s3obj.BucketName, s3obj.Name);
+                Console.WriteLine("Upload Complete: " + finalFilename);
+            }
+            catch (AmazonS3Exception err)
+            {
+                Console.WriteLine("Exception Occurred");
+            }
+            catch (Exception err)
+            {
+                Console.WriteLine(err);
+            }
+
+            //Console.WriteLine(finalFilename);
 
             // Start watching changes in the exported KVA.
             // We do this before running the post-recording command in case it wants to modify the data.

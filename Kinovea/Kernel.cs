@@ -49,7 +49,9 @@ namespace Kinovea.Root
         }
         #endregion
 
-        public User currentUser;
+        public List<User> currentUsers = new List<User>();
+        public Dictionary<User, Session> sessionMap = new Dictionary<User, Session>();
+        //public List<Session> currentSessions = new List<Session>();
 
         #region Members
         private KinoveaMainWindow mainWindow;
@@ -78,9 +80,13 @@ namespace Kinovea.Root
 
         // adding save to cloud menu item
         private ToolStripMenuItem mnuAlopexMenu = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuExportVideos = new ToolStripMenuItem();
         private ToolStripMenuItem mnuAddInstructor = new ToolStripMenuItem();
         private ToolStripMenuItem mnuSendToCloud = new ToolStripMenuItem();
         private ToolStripMenuItem mnuLogIn = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuSignUp = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuNewSession = new ToolStripMenuItem();
+        private ToolStripMenuItem mnuEndSession = new ToolStripMenuItem();
 
         // displaying current user in menu bar
         private ToolStripLabel mnuCurrentUser = new ToolStripLabel();
@@ -325,10 +331,14 @@ namespace Kinovea.Root
             #endregion
 
             // Save To Cloud
-            mnuAlopexMenu.DropDownItems.AddRange(new ToolStripItem[] { mnuLogIn, mnuSendToCloud, mnuAddInstructor });
+            mnuAlopexMenu.DropDownItems.AddRange(new ToolStripItem[] { mnuSignUp, mnuNewSession, mnuEndSession, mnuSendToCloud, mnuExportVideos });
+            mnuSignUp.Click += new EventHandler(mnuSignUpOnClick);
+            mnuNewSession.Click += new EventHandler(mnuNewSessionOnClick);
+            mnuEndSession.Click += new EventHandler(mnuEndSessionOnClick);
             mnuSendToCloud.Click += new EventHandler(mnuSendToCloudOnClick);
             mnuAddInstructor.Click += new EventHandler(mnuAddInstructorOnClick);
-            mnuLogIn.Click += new EventHandler(mnuLogInOnClick);
+            //mnuLogIn.Click += new EventHandler(mnuLogInOnClick);
+            mnuExportVideos.Click += new EventHandler(mnuExportVideosOnClick);
 
             #region Options
             mnuLanguages.Image = Properties.Resources.international;
@@ -453,17 +463,10 @@ namespace Kinovea.Root
             mnuSendToCloud.Text = RootLang.mnuSendToCloud;
             mnuAddInstructor.Text = RootLang.mnuAddInstructor;
             mnuLogIn.Text = RootLang.mnuLogIn;
-
-            // if there is current user, display the user name
-            if (currentUser != null)
-            {
-                log.Debug("User Logged In");
-                mnuCurrentUser.Text = "User: " + currentUser.Name;
-            }
-            //else
-            //{
-            //    mnuCurrentUser.Text = "User: ";
-            //}
+            mnuSignUp.Text = RootLang.mnuSignUp;
+            mnuNewSession.Text = RootLang.mnuNewSession;
+            mnuEndSession.Text = RootLang.mnuEndSession;
+            mnuExportVideos.Text = RootLang.mnuExportVideos;
 
             mnuTimecodeClassic.Text = "[h:][mm:]ss.xx[x]";
             mnuTimecodeClassic.Image = Properties.Resources.timecode;
@@ -493,10 +496,21 @@ namespace Kinovea.Root
         public void RefreshForUser()
         {
             // if there is current user, display the user name
-            if (currentUser != null)
+            if (currentUsers.Count > 0)
             {
                 log.Debug("User Logged In");
-                mnuCurrentUser.Text = "User: " + currentUser.Name;
+                if (currentUsers.Count == 1)
+                {
+                    mnuCurrentUser.Text = "User: " + currentUsers[0].Name;
+                }
+                else if (currentUsers.Count == 2)
+                {
+                    mnuCurrentUser.Text = "Users: " + currentUsers[0].Name + ", " + currentUsers[1].Name;
+                }
+            }
+            else
+            {
+                mnuCurrentUser.Text = "";
             }
         }
         #endregion
@@ -605,14 +619,23 @@ namespace Kinovea.Root
         // save to cloud on click functions
         private void mnuSendToCloudOnClick(object sender, EventArgs e)
         {
-            FormSaveToCloud s2c = new FormSaveToCloud();
+            FormSaveToCloud s2c = new FormSaveToCloud(this);
             s2c.ShowDialog();
             s2c.Dispose(); 
         }
 
+        private void mnuExportVideosOnClick(object sender, EventArgs e)
+        {
+            FormExportVideos expForm = new FormExportVideos(this);
+            expForm.ShowDialog();
+            expForm.Dispose();
+        }
+
         private void mnuAddInstructorOnClick(object sender, EventArgs e)
         {
-
+            FormAddInstructor addInstr = new FormAddInstructor(this);
+            addInstr.ShowDialog();
+            addInstr.Dispose();
         }
 
         private void mnuLogInOnClick(object sender, EventArgs e)
@@ -620,6 +643,27 @@ namespace Kinovea.Root
             fm_login loginForm = new fm_login(this);
             loginForm.ShowDialog();
             loginForm.Dispose();
+        }
+
+        private void mnuSignUpOnClick(object sender, EventArgs e)
+        {
+            FormSignUp signUpForm = new FormSignUp(this);
+            signUpForm.ShowDialog();
+            signUpForm.Dispose();
+        }
+
+        private void mnuNewSessionOnClick(object sender, EventArgs e)
+        {
+            FormStartSession newSesh = new FormStartSession(this);
+            newSesh.ShowDialog();
+            newSesh.Dispose();
+        }
+
+        private void mnuEndSessionOnClick(object sender, EventArgs e)
+        {
+            FormEndSession endSesh = new FormEndSession(this);
+            endSesh.ShowDialog();
+            endSesh.Dispose();
         }
 
         private void CheckTimecodeMenu()

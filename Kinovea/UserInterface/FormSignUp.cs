@@ -52,12 +52,13 @@ namespace Kinovea.Root
             User user = new User(   txt_name.Text, 
                                     txt_email.Text, 
                                     txt_phoneNum.Text, 
-                                    txt_zip.Text        
+                                    txt_zip.Text,
+                                    false
                                     );
 
             collection.InsertOne(user);
-            kernel.currentUser = user;
-            kernel.RefreshForUser();
+            //kernel.currentUsers.Add(user);
+            //kernel.RefreshForUser();
             this.Close();
         }
 
@@ -67,16 +68,16 @@ namespace Kinovea.Root
         }
     }
 
-    public class VideoPair
+    public class VideoObj
     {
-        [BsonId]
-        public ObjectId VideoId { get; set; }
 
-        [BsonElement("Video1")]
-        public string Video1 { get; set; }
+        //[BsonElement("Video1")]
+        //public string Video1 { get; set; }
 
-        [BsonElement("Video2")]
-        public string Video2 { get; set; }
+        //[BsonElement("Video2")]
+        //public string Video2 { get; set; }
+
+        public List<string> VideoLinks { get; set; }
 
         [BsonElement("Club")]
         public string Club { get; set; }
@@ -87,10 +88,32 @@ namespace Kinovea.Root
         [BsonElement("Name")]
         public string Name { get; set; }
 
-        public VideoPair(string vid1, string vid2)
+        [BsonElement("Session")]
+        public Session Session { get; set; }
+
+        public VideoObj()
         {
-            Video1 = vid1;
-            Video2 = vid2;
+            VideoLinks = new List<string>();
+        }
+
+        public VideoObj(List<string> videoLinks)
+        {
+            VideoLinks = new List<string>(videoLinks);
+        }
+    }
+
+    public class Session
+    {
+        [BsonId]
+        public ObjectId Id { get; set; }
+
+        //[BsonElement("Videos")]
+        //public List<VideoObj> Videos { get; set; }
+
+        public Session()
+        {
+            Id = ObjectId.GenerateNewId();
+            
         }
     }
 
@@ -111,16 +134,23 @@ namespace Kinovea.Root
         [BsonElement("ZipCode")]
         public string ZipCode { get; set; }
 
+        [BsonElement("Instructor")]
+        public bool Instructor { get; set; }
+
         [BsonElement("Videos")]
+        public List<VideoObj> Videos { get; set; }
 
-        public VideoPair[] Videos { get; set; }
+        //[BsonElement("Session")]
+        //public Session Session { get; set; }
 
-        public User(string name, string email, string phoneNum, string zipCode)
+        public User(string name, string email, string phoneNum, string zipCode, bool instructor)
         {
             Name = name;
             Email = email;
             PhoneNumber = phoneNum;
             ZipCode = zipCode;
+            Instructor = instructor;
+            Videos = new List<VideoObj>();
         }
     }
 }

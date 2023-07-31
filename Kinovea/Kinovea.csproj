@@ -179,7 +179,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="AWSSDK.Core, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
-      <HintPath>..\packages\AWSSDK.Core.3.7.100.14\lib\net45\AWSSDK.Core.dll</HintPath>
+      <HintPath>..\packages\AWSSDK.Core.3.7.200.6\lib\net45\AWSSDK.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="AWSSDK.S3, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
+      <HintPath>..\packages\AWSSDK.S3.3.7.201.4\lib\net45\AWSSDK.S3.dll</HintPath>
     </Reference>
     <Reference Include="AWSSDK.SecurityToken, Version=3.3.0.0, Culture=neutral, PublicKeyToken=885c28607f98e604, processorArchitecture=MSIL">
       <HintPath>..\packages\AWSSDK.SecurityToken.3.7.100.14\lib\net45\AWSSDK.SecurityToken.dll</HintPath>
@@ -300,6 +303,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AwsS3\Models\AwsCredentials.cs" />
+    <Compile Include="AwsS3\Models\S3Object.cs" />
+    <Compile Include="AwsS3\Models\S3ResponseDto.cs" />
+    <Compile Include="AwsS3\Services\IStorageService.cs" />
+    <Compile Include="AwsS3\Services\StorageService.cs" />
     <Compile Include="NativeMethods.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -324,6 +332,18 @@
     <Compile Include="UserInterface\FormAddInstructor.Designer.cs">
       <DependentUpon>FormAddInstructor.cs</DependentUpon>
     </Compile>
+    <Compile Include="UserInterface\FormEndSession.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\FormEndSession.Designer.cs">
+      <DependentUpon>FormEndSession.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\FormExportVideos.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\FormExportVideos.Designer.cs">
+      <DependentUpon>FormExportVideos.cs</DependentUpon>
+    </Compile>
     <Compile Include="UserInterface\FormLogIn.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -347,6 +367,12 @@
     </Compile>
     <Compile Include="UserInterface\FormSignUp.Designer.cs">
       <DependentUpon>FormSignUp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="UserInterface\FormStartSession.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="UserInterface\FormStartSession.Designer.cs">
+      <DependentUpon>FormStartSession.cs</DependentUpon>
     </Compile>
     <Compile Include="UserInterface\PreferencePanelButtton.cs">
       <SubType>UserControl</SubType>
@@ -499,6 +525,12 @@
     <EmbeddedResource Include="UserInterface\FormAddInstructor.resx">
       <DependentUpon>FormAddInstructor.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\FormEndSession.resx">
+      <DependentUpon>FormEndSession.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\FormExportVideos.resx">
+      <DependentUpon>FormExportVideos.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\FormLogIn.resx">
       <DependentUpon>FormLogIn.cs</DependentUpon>
     </EmbeddedResource>
@@ -510,6 +542,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\FormSignUp.resx">
       <DependentUpon>FormSignUp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="UserInterface\FormStartSession.resx">
+      <DependentUpon>FormStartSession.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="UserInterface\PreferencePanelButtton.resx">
       <DependentUpon>PreferencePanelButtton.cs</DependentUpon>
@@ -777,8 +812,11 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Analyzer Include="..\packages\AWSSDK.S3.3.7.201.4\analyzers\dotnet\cs\AWSSDK.S3.CodeAnalysis.dll" />
+    <Analyzer Include="..\packages\AWSSDK.S3.3.7.201.4\analyzers\dotnet\cs\SharedAnalysisCode.dll" />
     <Analyzer Include="..\packages\AWSSDK.SecurityToken.3.7.100.14\analyzers\dotnet\cs\AWSSDK.SecurityToken.CodeAnalysis.dll" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <Import Project="..\Kinovea.targets" />
   <Target Name="FixAL1703Warning" BeforeTargets="GenerateSatelliteAssemblies" Condition="'$(PlatformTarget)' == 'x64'">

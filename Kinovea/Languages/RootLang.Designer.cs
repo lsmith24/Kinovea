@@ -1132,6 +1132,24 @@ namespace Kinovea.Root.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to End Session.
+        /// </summary>
+        internal static string mnuEndSession {
+            get {
+                return ResourceManager.GetString("mnuEndSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Export Videos.
+        /// </summary>
+        internal static string mnuExportVideos {
+            get {
+                return ResourceManager.GetString("mnuExportVideos", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to File.
         /// </summary>
         internal static string mnuFile {
@@ -1213,6 +1231,15 @@ namespace Kinovea.Root.Languages {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Start Session.
+        /// </summary>
+        internal static string mnuNewSession {
+            get {
+                return ResourceManager.GetString("mnuNewSession", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Options.
         /// </summary>
         internal static string mnuOptions {
@@ -1254,6 +1281,15 @@ namespace Kinovea.Root.Languages {
         internal static string mnuSendToCloud {
             get {
                 return ResourceManager.GetString("mnuSendToCloud", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Sign Up.
+        /// </summary>
+        internal static string mnuSignUp {
+            get {
+                return ResourceManager.GetString("mnuSignUp", resourceCulture);
             }
         }
         

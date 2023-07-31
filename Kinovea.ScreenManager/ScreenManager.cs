@@ -73,6 +73,8 @@ namespace Kinovea.ScreenManager
         private int dualLaunchSettingsPendingCountdown;
         private List<string> camerasToDiscover = new List<string>();
         private AudioInputLevelMonitor audioInputLevelMonitor = new AudioInputLevelMonitor();
+
+        private int numCameras = 0;
         
         #region Menus
         
@@ -2371,8 +2373,26 @@ namespace Kinovea.ScreenManager
 
         private void TriggerCapture()
         {
+            //numCameras = 0;
+
             foreach (CaptureScreen screen in captureScreens)
                 screen.TriggerCapture();
+
+            //foreach (CaptureScreen screen in captureScreens)
+            //{
+            //    bool succeeded = screen.TriggerCapture();
+            //    if (succeeded)
+            //    {
+            //        numCameras++;
+            //    }
+            //}
+            //Console.WriteLine(numCameras);
+                
+        }
+
+        public int getNumCameras()
+        {
+            return numCameras;
         }
 
         private void AudioDeviceLost()
@@ -2592,5 +2612,11 @@ namespace Kinovea.ScreenManager
         }
 
         #endregion
+
+        // get capture screen list
+        public IEnumerable<CaptureScreen> GetCaptureScreens()
+        {
+            return captureScreens;
+        }
     }
 }
